@@ -31,6 +31,9 @@ Blackjack/
    cd Blackjack
    ```
 
+### Project Statsus
+Work in Progress/Unfinished
+
 2. Open the project in IntelliJ IDEA and run `BlackJack.java`, or compile and run manually:
    ```bash
    javac src/*.java
