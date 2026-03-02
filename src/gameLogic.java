@@ -74,8 +74,9 @@ public class gameLogic {
             gui.showMessage("Well, that was unsatisfying. Thank you for making my job so easy");
             dealer.getHand().get(1).faceUp = true; // Flips the hidden card face up
             gui.updateDisplay();
-
             gui.enableActionButtons(false);
+            endGame();
+            return;
         }
         else if(playerScore == 21)
         {
@@ -126,12 +127,15 @@ public class gameLogic {
         }
         else
         {
-            if(getDealerScore() > 21) {
+            if(getDealerScore() > 21)
+            {
                 gui.showMessage("A momentary lapse. Savor this small victory. It won't happen again");
                 player.winBet(false);
-                //game ends
+                endGame();
+                return;
             }
             compareScores();
+            endGame();
         }
     }
 
@@ -201,10 +205,11 @@ public class gameLogic {
         deck = new Deck();
 
         gui.clearGame();
+        gui.resetUI();
 
         startGame();
 
-        gui.enableActionButtons(true);
+        //gui.enableActionButtons(true);
     }
 
     public void handleBet()

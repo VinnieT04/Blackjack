@@ -8,7 +8,6 @@ public class GameWindow extends JFrame {
 
     private JButton hitButton;
     private JButton standButton;
-    private JButton againButton;
     private JLabel dealerSayings;
     private JLabel playerScore;
     private JLabel dealerScore;
@@ -20,6 +19,8 @@ public class GameWindow extends JFrame {
     private JPanel buttonGroup;
     private JPanel pCard;
     private JPanel dCard;
+    private JPanel endGame;
+    private JButton againButton;
 
     public GameWindow(String playerName) {
 
@@ -55,11 +56,6 @@ public class GameWindow extends JFrame {
             action.handleStand();
         });
         standButton.setFocusable(false);
-        againButton = new JButton("Play Again?");
-        againButton.setEnabled(false);
-        againButton.addActionListener(e -> {
-            action.newGame();
-        });
 
         //set labels
         //--PLAYER--
@@ -90,7 +86,7 @@ public class GameWindow extends JFrame {
         controlPanel.setLayout(new GridBagLayout());
         controlPanel.add(buttonGroup, new GridBagConstraints());
 
-        //--CARDS-- level three children
+        //--CARDS--
         pCard = new JPanel(new FlowLayout(FlowLayout.CENTER, 10,10));
         pCard.setBackground(tableColor);
         dCard = new JPanel(new FlowLayout(FlowLayout.CENTER, 10,10));
@@ -119,10 +115,25 @@ public class GameWindow extends JFrame {
         dealerPanel.add(dCard, BorderLayout.CENTER);
         dealerPanel.setBounds(0,0,1000,300);
 
-        //--GAME-- (parent of player and dealer panel)
+        //--END OF GAME--
+        endGame = new JPanel();
+        endGame.setLayout(new GridBagLayout());
+        endGame.setBackground(new Color(0,0,0,160));
+        endGame.setBounds(300, 190,400,150);
+        endGame.setVisible(false);
+
+        //--play again button--
+        againButton = new JButton("Play Again?");
+        againButton.setFont(new Font("Serif", Font.BOLD, 20));
+        againButton.setPreferredSize(new Dimension(180, 55));
+        againButton.addActionListener(e -> action.newGame());
+        endGame.add(againButton);
+
+        //--GAME--
         gamePanel.setLayout(null);
         gamePanel.add(dealerPanel);
         gamePanel.add(playerPanel);
+        gamePanel.add(endGame);
 
         //--DIALOGUE--
         dialoguePanel.setLayout(new BorderLayout());
@@ -160,7 +171,7 @@ public class GameWindow extends JFrame {
             pCard.add(cardLabel);
         }
 
-        // Draw Dealer's cards
+        //draw Dealer's cards
         for (Cards card : dHand) {
             ImageIcon cardIcon = loadImage(card);
             JLabel cardLabel = new JLabel(cardIcon);
@@ -180,8 +191,8 @@ public class GameWindow extends JFrame {
 
     public void enableActionButtons(boolean enable)
     {
-        hitButton.setEnabled(false);
-        standButton.setEnabled(false);
+        hitButton.setEnabled(enable);
+        standButton.setEnabled(enable);
     }
 
     public void clearGame() {
@@ -228,6 +239,16 @@ public class GameWindow extends JFrame {
      {
          hitButton.setEnabled(false);
          standButton.setEnabled(false);
-         againButton.setEnabled(true);
+         endGame.setVisible(true);
+         endGame.revalidate();
+         endGame.repaint();
+     }
+
+     public void resetUI()
+     {
+         hitButton.setEnabled(true);
+         standButton.setEnabled(true);
+         endGame.setVisible(false);
+         dealerSayings.setText("Take a good look at that hand. It's the best you'll have all night");
      }
 }
